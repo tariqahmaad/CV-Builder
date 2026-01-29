@@ -13,27 +13,30 @@ interface CVPreviewProps {
 const NAVY_BLUE = "#1e4d7b";
 const TEAL = "#2e7d8a";
 
+// Section Header Component with horizontal line
+const SectionHeader = ({ title }: { title: string }) => (
+  <div className="mb-2">
+    <h2 className="text-[13pt] font-bold mb-1 text-black">{title}</h2>
+    <hr className="border-t border-black" />
+  </div>
+);
+
 export function CVPreview({ data, className, id }: CVPreviewProps) {
   const { personalInfo, experience, education, projects, achievements, languages, skills } = data;
-
-  // Section Header Component with horizontal line
-  const SectionHeader = ({ title }: { title: string }) => (
-    <div className="mb-2">
-      <h2 className="text-[13pt] font-bold mb-1 text-black">{title}</h2>
-      <hr className="border-t border-black" />
-    </div>
-  );
+  
+  const technicalSkills = skills.filter(s => !s.category || s.category === 'technical');
+  const professionalSkills = skills.filter(s => s.category === 'professional');
 
   return (
     <div
       id={id}
       className={cn(
-        "bg-white text-black px-[40px] py-[20px] shadow-lg min-h-[297mm] w-[210mm] mx-auto box-border",
+        "bg-white text-black p-[0.5in] shadow-lg min-h-[297mm] w-[210mm] mx-auto box-border",
         "transform origin-top scale-[0.5] sm:scale-[0.6] md:scale-[0.8] lg:scale-100 transition-transform",
         className
       )}
       style={{ 
-        fontFamily: "Calibri, Arial, sans-serif",
+        fontFamily: "Carlito, Calibri, Arial, sans-serif",
         fontSize: "11pt",
         lineHeight: "1.3",
         color: "#000"
@@ -41,7 +44,7 @@ export function CVPreview({ data, className, id }: CVPreviewProps) {
     >
       {/* ========== DECORATIVE BLUE BAR ========== */}
       <div 
-        className="-mx-[40px] -mt-[20px] mb-4 h-[15px]"
+        className="mb-4 h-[15px]"
         style={{ backgroundColor: NAVY_BLUE }}
       />
 
@@ -61,13 +64,13 @@ export function CVPreview({ data, className, id }: CVPreviewProps) {
         </p>
         <p className="text-[11pt]">
           {personalInfo.linkedin && (
-            <a href={personalInfo.linkedin} target="_blank" className="underline" style={{ color: TEAL }}>LinkedIn Profile</a>
+            <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="underline" style={{ color: TEAL }}>LinkedIn Profile</a>
           )}
           {personalInfo.github && (
-            <> | <a href={personalInfo.github} target="_blank" className="underline" style={{ color: TEAL }}>GitHub</a></>
+            <> | <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" className="underline" style={{ color: TEAL }}>GitHub</a></>
           )}
           {personalInfo.website && (
-            <> | <a href={personalInfo.website} target="_blank" className="underline" style={{ color: TEAL }}>Portfolio</a></>
+            <> | <a href={personalInfo.website} target="_blank" rel="noopener noreferrer" className="underline" style={{ color: TEAL }}>Portfolio</a></>
           )}
         </p>
       </div>
@@ -86,26 +89,46 @@ export function CVPreview({ data, className, id }: CVPreviewProps) {
           <SectionHeader title="Key Skills" />
           
           {/* Technical Skills */}
-          <p className="text-[11pt] font-bold underline mb-2">Technical skills:</p>
-          <ul className="pl-[20pt] mb-3">
-            {skills.filter(s => !s.category || s.category === 'technical').map(skill => (
-              <li key={skill.id} className="flex items-start mb-1 text-[11pt]">
-                <span className="mr-2">•</span>
-                <span><strong>{skill.name}:</strong> {skill.description || ''}</span>
-              </li>
-            ))}
-          </ul>
+          {technicalSkills.length > 0 && (
+            <>
+              <p className="text-[11pt] font-bold underline mb-2 mt-2">Technical skills:</p>
+              <ul className="pl-[20pt] mb-3">
+                {technicalSkills.map(skill => (
+                  <li key={skill.id} className="flex items-start mb-1 text-[11pt]">
+                    <span className="mr-2">•</span>
+                    {skill.description ? (
+                      <span><span className="font-bold">{skill.name}:</span> <span className="font-normal">{skill.description}</span></span>
+                    ) : skill.name.includes(':') ? (
+                      <span><span className="font-bold">{skill.name.split(':')[0]}:</span> <span className="font-normal">{skill.name.split(':').slice(1).join(':')}</span></span>
+                    ) : (
+                      <span className="font-bold">{skill.name}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
 
           {/* Professional Attributes */}
-          <p className="text-[11pt] font-bold underline mb-2">Professional Attributes:</p>
-          <ul className="pl-[20pt]">
-            {skills.filter(s => s.category === 'professional').map(skill => (
-              <li key={skill.id} className="flex items-start mb-1 text-[11pt]">
-                <span className="mr-2">•</span>
-                <span><strong>{skill.name}:</strong> {skill.description || ''}</span>
-              </li>
-            ))}
-          </ul>
+          {professionalSkills.length > 0 && (
+            <>
+              <p className="text-[11pt] font-bold underline mb-2 mt-2">Professional Attributes:</p>
+              <ul className="pl-[20pt]">
+                {professionalSkills.map(skill => (
+                  <li key={skill.id} className="flex items-start mb-1 text-[11pt]">
+                    <span className="mr-2">•</span>
+                    {skill.description ? (
+                      <span><span className="font-bold">{skill.name}:</span> <span className="font-normal">{skill.description}</span></span>
+                    ) : skill.name.includes(':') ? (
+                      <span><span className="font-bold">{skill.name.split(':')[0]}:</span> <span className="font-normal">{skill.name.split(':').slice(1).join(':')}</span></span>
+                    ) : (
+                      <span className="font-bold">{skill.name}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </section>
       )}
 
@@ -152,7 +175,9 @@ export function CVPreview({ data, className, id }: CVPreviewProps) {
             <div key={job.id} className="mb-3">
               <div className="flex justify-between text-[11pt]">
                 <span className="font-bold">{job.role}{job.company ? ` at ${job.company}` : ""}</span>
-                <span className="text-right font-bold">{job.startDate} – {job.endDate || (job.current ? "Present" : "")}</span>
+                <span className="text-right font-bold">
+                  {[job.startDate, job.endDate || (job.current ? "Present" : "")].filter(Boolean).join(" – ")}
+                </span>
               </div>
               {job.description && (
                 <ul className="pl-[20pt]">
@@ -177,7 +202,9 @@ export function CVPreview({ data, className, id }: CVPreviewProps) {
             <div key={edu.id} className="mb-3">
               <div className="flex justify-between text-[11pt]">
                 <span className="font-bold">{edu.degree}</span>
-                <span className="text-right font-bold">{edu.startDate} – {edu.endDate}</span>
+                <span className="text-right font-bold">
+                  {[edu.startDate, edu.endDate].filter(Boolean).join(" – ")}
+                </span>
               </div>
               <p className="text-[11pt] text-black">{edu.school}</p>
             </div>

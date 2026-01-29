@@ -1,0 +1,54 @@
+
+> cv-generator@0.1.0 lint C:\Users\AHMAD\Documents\Code\CV Generator
+> eslint
+
+
+C:\Users\AHMAD\Documents\Code\CV Generator\components\cv-builder.tsx
+   51:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\AHMAD\Documents\Code\CV Generator\components\cv-builder.tsx:51:5
+  49 |   // Client-side check
+  50 |   useEffect(() => {
+> 51 |     setIsClient(true);
+     |     ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  52 |   }, []);
+  53 |
+  54 |   // Load saved CV data when user signs in  react-hooks/set-state-in-effect
+   76:7   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\AHMAD\Documents\Code\CV Generator\components\cv-builder.tsx:76:7
+  74 |   useEffect(() => {
+  75 |     if (!user) {
+> 76 |       setDataLoaded(false);
+     |       ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  77 |       setSaveStatus("idle");
+  78 |     }
+  79 |   }, [user]);   react-hooks/set-state-in-effect
+  314:37  warning  The ref value 'saveTimeoutRef.current' will likely have changed by the time this effect cleanup function runs. If this ref points to a node rendered by React, copy 'saveTimeoutRef.current' to a variable inside the effect, and use that variable in the cleanup function                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              react-hooks/exhaustive-deps
+  331:8   error    Use "@ts-expect-error" instead of "@ts-ignore", as "@ts-ignore" will do nothing if the following line is error-free                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/ban-ts-comment
+
+C:\Users\AHMAD\Documents\Code\CV Generator\components\forms\EducationForm.tsx
+  8:10  warning  'Textarea' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\AHMAD\Documents\Code\CV Generator\components\forms\SkillsForm.tsx
+  62:31  warning  Unused eslint-disable directive (no problems were reported from 'jsx-a11y/no-onchange')
+
+C:\Users\AHMAD\Documents\Code\CV Generator\components\ui\AuthModal.tsx
+  386:22  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+Γ£û 7 problems (4 errors, 3 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+
+ΓÇëELIFECYCLEΓÇë Command failed with exit code 1.

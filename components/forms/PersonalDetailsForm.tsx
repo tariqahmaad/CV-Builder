@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormContext } from "react-hook-form";
+import { useFormContext, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CVData } from "@/lib/types";
 
 export function PersonalDetailsForm() {
-  const { register } = useFormContext<CVData>();
+  const { control } = useFormContext<CVData>();
 
   return (
     <Card>
@@ -19,18 +19,22 @@ export function PersonalDetailsForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="fullName">Full Name</Label>
-            <Input
-              id="fullName"
-              placeholder="Tariq Ahmad"
-              {...register("personalInfo.fullName")}
+            <Controller
+              control={control}
+              name="personalInfo.fullName"
+              render={({ field }) => (
+                <Input id="fullName" placeholder="Tariq Ahmad" {...field} />
+              )}
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="jobTitle">Job Title (Optional)</Label>
-            <Input
-              id="jobTitle"
-              placeholder=""
-              {...register("personalInfo.jobTitle")}
+            <Controller
+              control={control}
+              name="personalInfo.jobTitle"
+              render={({ field }) => (
+                <Input id="jobTitle" placeholder="" {...field} />
+              )}
             />
           </div>
         </div>
@@ -38,67 +42,109 @@ export function PersonalDetailsForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="tariq@example.com"
-              {...register("personalInfo.email")}
+            <Controller
+              control={control}
+              name="personalInfo.email"
+              render={({ field }) => (
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="tariq@example.com"
+                  {...field}
+                />
+              )}
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="phone">Phone</Label>
-            <Input
-              id="phone"
-              type="tel"
-              placeholder="+90 53 454 ..."
-              {...register("personalInfo.phone")}
+            <Controller
+              control={control}
+              name="personalInfo.phone"
+              render={({ field }) => (
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="+90 53 454 ..."
+                  {...field}
+                />
+              )}
             />
           </div>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="address">Address (City, Country)</Label>
-          <Input
-            id="address"
-            placeholder="Istanbul, Turkey"
-            {...register("personalInfo.address")}
+          <Controller
+            control={control}
+            name="personalInfo.address"
+            render={({ field }) => (
+              <Input
+                id="address"
+                placeholder="Istanbul, Turkey"
+                {...field}
+              />
+            )}
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-             <div className="space-y-2">
+          <div className="space-y-2">
             <Label htmlFor="linkedin">LinkedIn URL</Label>
-            <Input
-              id="linkedin"
-              placeholder="linkedin.com/in/..."
-              {...register("personalInfo.linkedin")}
+            <Controller
+              control={control}
+              name="personalInfo.linkedin"
+              render={({ field }) => (
+                <Input
+                  id="linkedin"
+                  placeholder="linkedin.com/in/..."
+                  {...field}
+                />
+              )}
             />
           </div>
-           <div className="space-y-2">
+          <div className="space-y-2">
             <Label htmlFor="github">GitHub URL</Label>
-            <Input
-              id="github"
-              placeholder="github.com/..."
-              {...register("personalInfo.github")}
+            <Controller
+              control={control}
+              name="personalInfo.github"
+              render={({ field }) => (
+                <Input
+                  id="github"
+                  placeholder="github.com/..."
+                  {...field}
+                />
+              )}
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="website">Portfolio URL</Label>
-            <Input
-              id="website"
-              placeholder="tariqahmad.dev"
-              {...register("personalInfo.website")}
+            <Controller
+              control={control}
+              name="personalInfo.website"
+              render={({ field }) => (
+                <Input
+                  id="website"
+                  placeholder="tariqahmad.dev"
+                  {...field}
+                />
+              )}
             />
           </div>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="summary">Career Objective / Summary</Label>
-          <Textarea
-            id="summary"
-            placeholder="Ambitious Computer Engineering student..."
-            className="min-h-[100px]"
-            {...register("personalInfo.summary")}
+          <Controller
+            control={control}
+            name="personalInfo.summary"
+            render={({ field }) => (
+              <Textarea
+                id="summary"
+                placeholder="Ambitious Computer Engineering student..."
+                className="min-h-[100px]"
+                {...field}
+              />
+            )}
           />
         </div>
       </CardContent>

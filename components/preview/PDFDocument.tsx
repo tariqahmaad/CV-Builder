@@ -1,7 +1,18 @@
 "use client";
 
-import { Page, Text, View, Document, StyleSheet, Link } from "@react-pdf/renderer";
+import { Page, Text, View, Document, StyleSheet, Link, Font } from "@react-pdf/renderer";
 import { CVData } from "@/lib/types";
+
+// Register Carlito font - metrically compatible with Calibri (open source from Google)
+Font.register({
+  family: 'Carlito',
+  fonts: [
+    { src: 'https://raw.githubusercontent.com/googlefonts/carlito/main/fonts/ttf/Carlito-Regular.ttf' },
+    { src: 'https://raw.githubusercontent.com/googlefonts/carlito/main/fonts/ttf/Carlito-Bold.ttf', fontWeight: 'bold' },
+    { src: 'https://raw.githubusercontent.com/googlefonts/carlito/main/fonts/ttf/Carlito-Italic.ttf', fontStyle: 'italic' },
+    { src: 'https://raw.githubusercontent.com/googlefonts/carlito/main/fonts/ttf/Carlito-BoldItalic.ttf', fontWeight: 'bold', fontStyle: 'italic' }
+  ]
+});
 
 // Colors matching the user's CV
 const NAVY_BLUE = "#1e4d7b";
@@ -9,82 +20,55 @@ const TEAL = "#2e7d8a";
 
 const styles = StyleSheet.create({
   page: {
-    fontFamily: "Helvetica",
+    fontFamily: "Carlito",
     fontSize: 11,
-    paddingTop: 0,
-    paddingBottom: 30,
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingTop: 36,    // 0.5 inches = 36pt
+    paddingBottom: 36, // 0.5 inches = 36pt
+    paddingLeft: 36,   // 0.5 inches = 36pt
+    paddingRight: 36,  // 0.5 inches = 36pt
     color: "#000000",
-    lineHeight: 1.3,
-  },
-  // Header with blue background
-  headerContainer: {
-    backgroundColor: NAVY_BLUE,
-    textAlign: "center",
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    marginLeft: -40,
-    marginRight: -40,
-    marginBottom: 15,
-  },
-  name: {
-    fontSize: 28,
-    fontFamily: "Helvetica-Bold",
-    color: "#FFFFFF",
-    marginBottom: 4,
-  },
-  headerText: {
-    fontSize: 11,
-    color: "#FFFFFF",
-    marginBottom: 2,
-  },
-  headerLink: {
-    fontSize: 11,
-    color: "#87CEEB",
-    textDecoration: "underline",
+    lineHeight: 1.3,   // Matches CVPreview lineHeight: 1.3
   },
   // Section with horizontal line
   section: {
-    marginBottom: 12,
+    marginBottom: 16, // Matches mb-4 (16px)
   },
   sectionHeader: {
-    marginBottom: 6,
+    marginBottom: 8, // Matches mb-2 (8px)
   },
   sectionTitle: {
     fontSize: 13,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Carlito",
+    fontWeight: "bold",
     color: "#000000",
-    marginBottom: 2,
+    marginBottom: 4, // Matches mb-1 (4px)
   },
   horizontalLine: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#000000",
+    borderTopWidth: 0.5, // Thinner to visually match 1px screen line
+    borderTopColor: "#000000",
   },
   // Text styles
   paragraph: {
     fontSize: 11,
-    marginBottom: 4,
+    marginBottom: 0, // No explicit margin in CVPreview paragraphs
   },
   boldText: {
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Carlito",
+    fontWeight: "bold",
     fontSize: 11,
-  },
-  tealText: {
-    fontSize: 11,
-    color: "#000000",
   },
   // Skills
   skillsSubtitle: {
     fontSize: 11,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Carlito",
+    fontWeight: "bold",
     textDecoration: "underline",
-    marginBottom: 6,
+    marginBottom: 8, // Matches mb-2 (8px)
   },
   bulletRow: {
     flexDirection: "row",
-    paddingLeft: 20,
-    marginBottom: 3,
+    paddingLeft: 20, // Matches pl-[20pt]
+    marginBottom: 0, 
   },
   bullet: {
     width: 12,
@@ -98,31 +82,37 @@ const styles = StyleSheet.create({
   tableRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 2,
+    marginBottom: 0, // No explicit margin in CVPreview flex rows
   },
   tableLeft: {
     fontSize: 11,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Carlito",
+    fontWeight: "bold",
     maxWidth: "75%",
   },
   tableRight: {
     fontSize: 11,
-    fontFamily: "Helvetica-Bold",
+    fontFamily: "Carlito",
+    fontWeight: "bold",
     textAlign: "right",
   },
   itemContainer: {
-    marginBottom: 10,
+    marginBottom: 12, // Matches mb-3 (12px)
   },
   // Languages horizontal
   languagesRow: {
     flexDirection: "row",
     flexWrap: "wrap",
     paddingLeft: 10,
-    gap: 30,
+    gap: 32, // Matches gap-8 (32px)
   },
   languageItem: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  // Skills list container
+  skillsList: {
+    marginBottom: 12, // Matches mb-3 (12px)
   },
 });
 
@@ -130,30 +120,38 @@ interface PDFDocumentProps {
   data: CVData;
 }
 
+// Section Header Component
+const SectionHeader = ({ title }: { title: string }) => (
+  <View style={styles.sectionHeader}>
+    <Text style={styles.sectionTitle}>{title}</Text>
+    <View style={styles.horizontalLine} />
+  </View>
+);
+
 export function PDFDocument({ data }: PDFDocumentProps) {
   const { personalInfo, experience, education, projects, achievements, languages, skills } = data;
 
-  // Section Header Component
-  const SectionHeader = ({ title }: { title: string }) => (
-    <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}>{title}</Text>
-      <View style={styles.horizontalLine} />
-    </View>
-  );
+  const technicalSkills = skills.filter(s => !s.category || s.category === 'technical');
+  const professionalSkills = skills.filter(s => s.category === 'professional');
 
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         
         {/* ========== DECORATIVE BLUE BAR ========== */}
-        <View style={{ backgroundColor: NAVY_BLUE, height: 15, marginLeft: -40, marginRight: -40, marginBottom: 15 }} />
+        {/* Matches h-[15px] -mx-[40px] -mt-[20px] mb-4 */}
+        <View style={{ 
+          backgroundColor: NAVY_BLUE, 
+          height: 15, // Matches h-[15px]
+          marginBottom: 16 // Matches mb-4 (16px)
+        }} />
 
         {/* ========== HEADER (Below blue bar, on white) ========== */}
-        <View style={{ textAlign: "center", marginBottom: 15 }}>
-          <Text style={{ fontSize: 28, fontFamily: "Helvetica-Bold", color: "#000000", marginBottom: 4, textAlign: "center" }}>
+        <View style={{ textAlign: "center", marginBottom: 16 }}>
+          <Text style={{ fontSize: 28, fontFamily: "Carlito", fontWeight: "bold", color: "#000000", marginBottom: 4, textAlign: "center", lineHeight: 1.3 }}>
             {personalInfo.fullName || "Your Name"}
           </Text>
-          {personalInfo.address && <Text style={{ fontSize: 11, textAlign: "center", marginBottom: 2 }}>{personalInfo.address}</Text>}
+          {personalInfo.address && <Text style={{ fontSize: 11, textAlign: "center", marginBottom: 4 }}>{personalInfo.address}</Text>}
           <View style={{ flexDirection: "row", justifyContent: "center", flexWrap: "wrap" }}>
             {personalInfo.phone && <Text style={{ fontSize: 11 }}>{personalInfo.phone}</Text>}
             {personalInfo.email && (
@@ -196,26 +194,54 @@ export function PDFDocument({ data }: PDFDocumentProps) {
             <SectionHeader title="Key Skills" />
             
             {/* Technical Skills */}
-            <Text style={styles.skillsSubtitle}>Technical skills:</Text>
-            {skills.filter(s => !s.category || s.category === 'technical').map(skill => (
-              <View key={skill.id} style={styles.bulletRow}>
-                <Text style={styles.bullet}>•</Text>
-                <Text style={styles.bulletText}>
-                  <Text style={{ fontFamily: "Helvetica-Bold" }}>{skill.name}:</Text> {skill.description || ''}
-                </Text>
-              </View>
-            ))}
+            {technicalSkills.length > 0 && (
+              <>
+                <Text style={[styles.skillsSubtitle, { marginTop: 8 }]}>Technical skills:</Text>
+                {technicalSkills.map(skill => (
+                  <View key={skill.id} style={[styles.bulletRow, { marginBottom: 4 }]}>
+                    <Text style={styles.bullet}>•</Text>
+                    <Text style={styles.bulletText}>
+                      {skill.description ? (
+                        <>
+                           <Text style={{ fontFamily: "Carlito", fontWeight: "bold" }}>{skill.name}:</Text><Text style={{ fontFamily: "Carlito" }}> {skill.description}</Text>
+                        </>
+                      ) : skill.name.includes(':') ? (
+                        <>
+                           <Text style={{ fontFamily: "Carlito", fontWeight: "bold" }}>{skill.name.split(':')[0]}:</Text><Text style={{ fontFamily: "Carlito" }}>{skill.name.split(':').slice(1).join(':')}</Text>
+                        </>
+                      ) : (
+                         <Text style={{ fontFamily: "Carlito", fontWeight: "bold" }}>{skill.name}</Text>
+                      )}
+                    </Text>
+                  </View>
+                ))}
+              </>
+            )}
 
             {/* Professional Attributes */}
-            <Text style={[styles.skillsSubtitle, { marginTop: 8 }]}>Professional Attributes:</Text>
-            {skills.filter(s => s.category === 'professional').map(skill => (
-              <View key={skill.id} style={styles.bulletRow}>
-                <Text style={styles.bullet}>•</Text>
-                <Text style={styles.bulletText}>
-                  <Text style={{ fontFamily: "Helvetica-Bold" }}>{skill.name}:</Text> {skill.description || ''}
-                </Text>
-              </View>
-            ))}
+            {professionalSkills.length > 0 && (
+              <>
+                <Text style={[styles.skillsSubtitle, { marginTop: technicalSkills.length > 0 ? 8 : 8 }]}>Professional Attributes:</Text>
+                {professionalSkills.map(skill => (
+                  <View key={skill.id} style={[styles.bulletRow, { marginBottom: 4 }]}>
+                    <Text style={styles.bullet}>•</Text>
+                    <Text style={styles.bulletText}>
+                      {skill.description ? (
+                        <>
+                           <Text style={{ fontFamily: "Carlito", fontWeight: "bold" }}>{skill.name}:</Text><Text style={{ fontFamily: "Carlito" }}> {skill.description}</Text>
+                        </>
+                      ) : skill.name.includes(':') ? (
+                        <>
+                           <Text style={{ fontFamily: "Carlito", fontWeight: "bold" }}>{skill.name.split(':')[0]}:</Text><Text style={{ fontFamily: "Carlito" }}>{skill.name.split(':').slice(1).join(':')}</Text>
+                        </>
+                      ) : (
+                         <Text style={{ fontFamily: "Carlito", fontWeight: "bold" }}>{skill.name}</Text>
+                      )}
+                    </Text>
+                  </View>
+                ))}
+              </>
+            )}
           </View>
         )}
 
@@ -224,14 +250,14 @@ export function PDFDocument({ data }: PDFDocumentProps) {
           <View style={styles.section}>
             <SectionHeader title="Projects" />
             {projects.map(proj => (
-              <View key={proj.id} style={styles.itemContainer}>
+              <View key={proj.id} style={styles.itemContainer} wrap={false}>
                 <View style={styles.tableRow}>
                   <Text style={styles.tableLeft}>{proj.title}</Text>
                   <Text style={styles.tableRight}>{proj.date}</Text>
                 </View>
                 {proj.techStack && (
                   <Text style={styles.paragraph}>
-                    <Text style={{ fontFamily: "Helvetica-Bold" }}>Skill:</Text> {proj.techStack}
+                    <Text style={{ fontFamily: "Carlito", fontWeight: "bold" }}>Skill:</Text> {proj.techStack}
                   </Text>
                 )}
                 <Text style={styles.paragraph}>{proj.description}</Text>
@@ -245,12 +271,12 @@ export function PDFDocument({ data }: PDFDocumentProps) {
           <View style={styles.section}>
             <SectionHeader title="Achievements" />
             {achievements.map(ach => (
-              <View key={ach.id} style={styles.itemContainer}>
+              <View key={ach.id} style={styles.itemContainer} wrap={false}>
                 <View style={styles.tableRow}>
                   <Text style={styles.tableLeft}>{ach.title}</Text>
                   <Text style={styles.tableRight}>{ach.date}</Text>
                 </View>
-                <Text style={styles.tealText}>{ach.organization}</Text>
+                <Text style={{ fontSize: 11 }}>{ach.organization}</Text>
               </View>
             ))}
           </View>
@@ -261,13 +287,15 @@ export function PDFDocument({ data }: PDFDocumentProps) {
           <View style={styles.section}>
             <SectionHeader title="Relevant Experience" />
             {experience.map(job => (
-              <View key={job.id} style={styles.itemContainer}>
+              <View key={job.id} style={styles.itemContainer} wrap={false}>
                 <View style={styles.tableRow}>
                   <Text style={styles.tableLeft}>
                     {job.role}{job.company ? ` at ${job.company}` : ""}
                   </Text>
                   <Text style={styles.tableRight}>
-                    {job.startDate} – {job.endDate || (job.current ? "Present" : "")}
+                    {
+                      [job.startDate, job.endDate || (job.current ? "Present" : "")].filter(Boolean).join(" – ")
+                    }
                   </Text>
                 </View>
                 {job.description && job.description.split('\n').filter(line => line.trim()).map((line, i) => (
@@ -286,12 +314,14 @@ export function PDFDocument({ data }: PDFDocumentProps) {
           <View style={styles.section}>
             <SectionHeader title="Education and Certification" />
             {education.map(edu => (
-              <View key={edu.id} style={styles.itemContainer}>
+              <View key={edu.id} style={styles.itemContainer} wrap={false}>
                 <View style={styles.tableRow}>
                   <Text style={styles.tableLeft}>{edu.degree}</Text>
-                  <Text style={styles.tableRight}>{edu.startDate} – {edu.endDate}</Text>
+                  <Text style={styles.tableRight}>
+                    {[edu.startDate, edu.endDate].filter(Boolean).join(" – ")}
+                  </Text>
                 </View>
-                <Text style={styles.tealText}>{edu.school}</Text>
+                <Text style={{ fontSize: 11 }}>{edu.school}</Text>
               </View>
             ))}
           </View>
@@ -305,7 +335,7 @@ export function PDFDocument({ data }: PDFDocumentProps) {
               {languages.map(lang => (
                 <View key={lang.id} style={styles.languageItem}>
                   <Text style={styles.bullet}>•</Text>
-                  <Text style={styles.tealText}>
+                  <Text style={{ fontSize: 11 }}>
                     {lang.name}{lang.proficiency ? ` (${lang.proficiency})` : ""}
                   </Text>
                 </View>
@@ -319,7 +349,7 @@ export function PDFDocument({ data }: PDFDocumentProps) {
           <SectionHeader title="References" />
           <View style={[styles.bulletRow, { paddingLeft: 10 }]}>
             <Text style={styles.bullet}>•</Text>
-            <Text style={styles.tealText}>Available upon request.</Text>
+            <Text style={{ fontSize: 11 }}>Available upon request.</Text>
           </View>
         </View>
 
