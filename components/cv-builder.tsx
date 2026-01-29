@@ -26,6 +26,7 @@ import { LanguagesForm } from "@/components/forms/LanguagesForm";
 import { SkillsForm } from "@/components/forms/SkillsForm";
 import { CVPreview } from "@/components/preview/CVPreview";
 import { PDFDocument } from "@/components/preview/PDFDocument";
+import { SectionSidebar } from "@/components/layout/SectionSidebar";
 import { initialCVData, CVData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/AuthContext";
@@ -44,6 +45,7 @@ export function CVBuilder() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Client-side check - this pattern is intentional for hydration
@@ -236,29 +238,66 @@ export function CVBuilder() {
 
         {/* Main Content Area */}
         <div className="flex flex-1 overflow-hidden flex-col md:flex-row">
-          {/* LEFT: Editor Panel */}
+          {/* LEFT: Editor Panel with Sidebar */}
           <div
             className={cn(
-              "w-full md:w-1/2 lg:w-5/12 overflow-y-auto p-4 md:p-6 lg:p-8 space-y-6 pb-24 md:pb-8 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-800",
-              activeTab === "preview" ? "hidden md:block" : "block"
+              "w-full md:w-1/2 lg:w-5/12 flex flex-col",
+              activeTab === "preview" ? "hidden md:flex" : "flex"
             )}
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-2xl font-bold tracking-tight text-foreground">CV Editor</h2>
-              {!user && (
-                <p className="text-xs text-muted-foreground">
-                  Sign in to save your progress
-                </p>
-              )}
-            </div>
+            <div className="flex flex-1 overflow-hidden relative">
+              {/* Sidebar - Collapsible */}
+              <SectionSidebar 
+                isOpen={isSidebarOpen}
+                onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="hidden md:flex h-full pt-6"
+              />
+              
+              {/* Scrollable Form Area */}
+              <div 
+                id="editor-scroll-container"
+                className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 scroll-smooth scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-800"
+              >
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-2xl font-bold tracking-tight text-foreground">CV Editor</h2>
+                  {!user && (
+                    <p className="text-xs text-muted-foreground">
+                      Sign in to save your progress
+                    </p>
+                  )}
+                </div>
 
-            <PersonalDetailsForm />
-            <ExperienceForm />
-            <EducationForm />
-            <ProjectsForm />
-            <AchievementsForm />
-            <LanguagesForm />
-            <SkillsForm />
+                <div className="space-y-12 pb-32 max-w-2xl mx-auto">
+                  <section id="personal" className="scroll-mt-6">
+                    <PersonalDetailsForm />
+                  </section>
+                  
+                  <section id="experience" className="scroll-mt-6">
+                    <ExperienceForm />
+                  </section>
+                  
+                  <section id="education" className="scroll-mt-6">
+                    <EducationForm />
+                  </section>
+                  
+                  <section id="projects" className="scroll-mt-6">
+                    <ProjectsForm />
+                  </section>
+                  
+                  <section id="achievements" className="scroll-mt-6">
+                    <AchievementsForm />
+                  </section>
+                  
+                  <section id="languages" className="scroll-mt-6">
+                    <LanguagesForm />
+                  </section>
+                  
+                  <section id="skills" className="scroll-mt-6">
+                    <SkillsForm />
+                  </section>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* RIGHT: Preview Panel */}
