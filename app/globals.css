@@ -50,86 +50,147 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  
+  /* Semantic Colors */
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  
+  /* CV Section Colors */
+  --color-section-personal: var(--color-personal);
+  --color-section-experience: var(--color-experience);
+  --color-section-education: var(--color-education);
+  --color-section-projects: var(--color-projects);
+  --color-section-achievements: var(--color-achievements);
+  --color-section-languages: var(--color-languages);
+  --color-section-skills: var(--color-skills);
+  
   --radius-sm: calc(var(--radius) - 2px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
 }
 
 @layer base {
+  /* Modern Professional Indigo-Neutral Theme */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-  }
- 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    /* Core Colors - Light Mode */
+    --background: 0 0% 98%;           /* #FAFAFA */
+    --foreground: 220 15% 15%;        /* #1E2128 */
+    --card: 0 0% 100%;                /* #FFFFFF */
+    --card-foreground: 220 15% 15%;   /* #1E2128 */
+    --popover: 0 0% 100%;             /* #FFFFFF */
+    --popover-foreground: 220 15% 15%; /* #1E2128 */
+
+    /* Primary - Indigo */
+    --primary: 240 55% 52%;           /* #444CE7 */
+    --primary-foreground: 0 0% 100%;  /* #FFFFFF */
+
+    /* Secondary - Soft Gray */
+    --secondary: 220 14% 96%;         /* #F1F5F9 */
+    --secondary-foreground: 220 15% 25%; /* #2D313A */
+
+    /* Muted - Light Gray */
+    --muted: 220 14% 96%;             /* #F1F5F9 */
+    --muted-foreground: 220 10% 45%;  /* #64748B */
+
+    /* Accent - Purple */
+    --accent: 262 56% 58%;            /* #7C3AED */
+    --accent-foreground: 0 0% 100%;   /* #FFFFFF */
+
+    /* Destructive - Red */
+    --destructive: 0 72% 51%;         /* #DC2626 */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+
+    /* Borders & Inputs */
+    --border: 220 13% 91%;            /* #E2E8F0 */
+    --input: 220 13% 91%;             /* #E2E8F0 */
+    --ring: 240 55% 52%;              /* #444CE7 */
+    --radius: 0.625rem;
+
+    /* Semantic Colors - Light Mode */
+    --success: 142 76% 36%;           /* #16A34A */
+    --success-foreground: 0 0% 100%;  /* #FFFFFF */
+    --warning: 38 92% 50%;            /* #F59E0B */
+    --warning-foreground: 220 15% 15%; /* #1E2128 */
+    --info: 217 91% 60%;              /* #3B82F6 */
+    --info-foreground: 0 0% 100%;     /* #FFFFFF */
+
+    /* CV Section Colors - Refined Indigo Spectrum */
+    --color-personal: 240 55% 52%;      /* #444CE7 - Primary Indigo */
+    --color-experience: 220 60% 48%;    /* #2E6AD0 - Ocean Blue */
+    --color-education: 190 55% 42%;     /* #2A9DB6 - Teal */
+    --color-projects: 25 75% 47%;       /* #D97706 - Amber */
+    --color-achievements: 270 50% 48%;  /* #7C3AED - Purple */
+    --color-languages: 340 60% 52%;     /* #DB2777 - Pink */
+    --color-skills: 200 65% 48%;        /* #0EA5E9 - Sky Blue */
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --background: 222.2 84% 4.9%;
-      --foreground: 210 40% 98%;
-      --card: 222.2 84% 4.9%;
-      --card-foreground: 210 40% 98%;
-      --popover: 222.2 84% 4.9%;
-      --popover-foreground: 210 40% 98%;
-      --primary: 210 40% 98%;
-      --primary-foreground: 222.2 47.4% 11.2%;
-      --secondary: 217.2 32.6% 17.5%;
-      --secondary-foreground: 210 40% 98%;
-      --muted: 217.2 32.6% 17.5%;
-      --muted-foreground: 215 20.2% 65.1%;
-      --accent: 217.2 32.6% 17.5%;
-      --accent-foreground: 210 40% 98%;
-      --destructive: 0 62.8% 30.6%;
-      --destructive-foreground: 210 40% 98%;
-      --border: 217.2 32.6% 17.5%;
-      --input: 217.2 32.6% 17.5%;
-      --ring: 212.7 26.8% 83.9%;
-    }
+  /* Dark Mode - Deep Navy */
+  .dark {
+    --background: 220 15% 8%;         /* #0F1115 */
+    --foreground: 220 10% 92%;        /* #E2E5EB */
+    --card: 220 15% 11%;              /* #14171C */
+    --card-foreground: 220 10% 92%;   /* #E2E5EB */
+    --popover: 220 15% 11%;           /* #14171C */
+    --popover-foreground: 220 10% 92%; /* #E2E5EB */
+
+    /* Primary - Bright Indigo */
+    --primary: 235 85% 65%;           /* #5B67F6 */
+    --primary-foreground: 0 0% 100%;  /* #FFFFFF */
+
+    /* Secondary - Dark Slate */
+    --secondary: 220 12% 18%;         /* #23262D */
+    --secondary-foreground: 220 10% 85%; /* #E2E5EB */
+
+    /* Muted - Dark Gray */
+    --muted: 220 12% 16%;             /* #1E2126 */
+    --muted-foreground: 220 10% 60%;  /* #8B94A8 */
+
+    /* Accent - Bright Purple */
+    --accent: 262 70% 65%;            /* #8B5CF6 */
+    --accent-foreground: 0 0% 100%;   /* #FFFFFF */
+
+    /* Destructive - Bright Red */
+    --destructive: 0 75% 58%;         /* #EF4444 */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+
+    /* Borders & Inputs */
+    --border: 220 12% 20%;            /* #272B34 */
+    --input: 220 12% 20%;             /* #272B34 */
+    --ring: 235 85% 65%;              /* #5B67F6 */
+
+    /* Semantic Colors - Dark Mode */
+    --success: 142 70% 50%;           /* #22C55E */
+    --success-foreground: 220 15% 8%; /* #0F1115 */
+    --warning: 38 90% 55%;            /* #FBBF24 */
+    --warning-foreground: 220 15% 8%; /* #0F1115 */
+    --info: 217 90% 65%;              /* #60A5FA */
+    --info-foreground: 220 15% 8%;    /* #0F1115 */
+
+    /* CV Section Colors - Brighter for Dark Mode */
+    --color-personal: 240 85% 68%;      /* #6366F1 */
+    --color-experience: 220 75% 62%;    /* #3B82F6 */
+    --color-education: 190 65% 52%;     /* #14B8A6 */
+    --color-projects: 35 85% 58%;       /* #F59E0B */
+    --color-achievements: 270 65% 62%;  /* #A855F7 */
+    --color-languages: 340 70% 62%;     /* #EC4899 */
+    --color-skills: 200 75% 58%;        /* #38BDF8 */
   }
-  
+
   * {
     @apply border-border;
   }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
@@ -146,6 +207,58 @@
 
   .slide-in-from-top-2 {
     animation-name: slideInFromTop2;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Futuristic glow animations */
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 0.5;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+  }
+
+  @keyframes shimmer-slide {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-shimmer-slide {
+    animation: shimmer-slide 1.5s ease-in-out infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
   }
 
   @keyframes fadeIn {

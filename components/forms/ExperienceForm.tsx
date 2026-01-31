@@ -19,6 +19,20 @@ export function ExperienceForm() {
     name: "experience",
     keyName: "_id",
   });
+  const [expandedIndex, setExpandedIndex] = React.useState<number | null>(null);
+
+  const handleAdd = () => {
+    append({
+      id: crypto.randomUUID(),
+      company: "",
+      role: "",
+      startDate: "",
+      endDate: "",
+      current: false,
+      description: "",
+    });
+    setExpandedIndex(fields.length);
+  };
 
   return (
     <Card>
@@ -33,12 +47,14 @@ export function ExperienceForm() {
           className="space-y-6"
         >
           {fields.map((field, index) => (
-            <ExperienceItem 
-              key={field.id} 
-              field={field} 
-              index={index} 
-              remove={remove} 
-              control={control} 
+            <ExperienceItem
+              key={field.id}
+              field={field}
+              index={index}
+              remove={remove}
+              control={control}
+              isExpanded={expandedIndex === index}
+              onToggle={() => setExpandedIndex(expandedIndex === index ? null : index)}
             />
           ))}
         </Reorder.Group>
@@ -48,17 +64,7 @@ export function ExperienceForm() {
           variant="outline"
           size="sm"
           className="w-full"
-          onClick={() =>
-            append({
-              id: crypto.randomUUID(),
-              company: "",
-              role: "",
-              startDate: "",
-              endDate: "",
-              current: false,
-              description: "",
-            })
-          }
+          onClick={handleAdd}
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Job
@@ -73,19 +79,22 @@ export function ExperienceForm() {
   );
 }
 
-function ExperienceItem({ 
-  field, 
-  index, 
-  remove, 
-  control 
-}: { 
-  field: Experience, 
-  index: number, 
-  remove: UseFieldArrayRemove, 
-  control: Control<CVData> 
+function ExperienceItem({
+  field,
+  index,
+  remove,
+  control,
+  isExpanded,
+  onToggle,
+}: {
+  field: Experience;
+  index: number;
+  remove: UseFieldArrayRemove;
+  control: Control<CVData>;
+  isExpanded: boolean;
+  onToggle: () => void;
 }) {
   const dragControls = useDragControls();
-  const [isExpanded, setIsExpanded] = React.useState(false);
 
   return (
     <Reorder.Item
@@ -114,7 +123,7 @@ function ExperienceItem({
             variant="ghost"
             size="sm"
             className="p-1 h-auto"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={onToggle}
           >
              {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
@@ -152,7 +161,7 @@ function ExperienceItem({
                     control={control}
                     name={`experience.${index}.company`}
                     render={({ field }) => (
-                      <Input placeholder="Company Name" {...field} />
+                      <Input placeholder="Company name" {...field} />
                     )}
                   />
                 </div>
@@ -162,7 +171,7 @@ function ExperienceItem({
                     control={control}
                     name={`experience.${index}.role`}
                     render={({ field }) => (
-                      <Input placeholder="Job Title" {...field} />
+                      <Input placeholder="Job title" {...field} />
                     )}
                   />
                 </div>
@@ -185,7 +194,7 @@ function ExperienceItem({
                     control={control}
                     name={`experience.${index}.endDate`}
                     render={({ field }) => (
-                      <Input placeholder="MM/YYYY" {...field} />
+                      <Input placeholder="MM/YYYY or Present" {...field} />
                     )}
                   />
                 </div>
@@ -198,7 +207,7 @@ function ExperienceItem({
                   name={`experience.${index}.description`}
                   render={({ field }) => (
                     <Textarea
-                      placeholder="Responsibilities and achievements..."
+                      placeholder="Your responsibilities and achievements"
                       {...field}
                     />
                   )}

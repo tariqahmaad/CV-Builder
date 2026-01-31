@@ -19,6 +19,18 @@ export function ProjectsForm() {
     name: "projects",
     keyName: "_id",
   });
+  const [expandedIndex, setExpandedIndex] = React.useState<number | null>(null);
+
+  const handleAdd = () => {
+    append({
+      id: crypto.randomUUID(),
+      title: "",
+      date: "",
+      techStack: "",
+      description: "",
+    });
+    setExpandedIndex(fields.length);
+  };
 
   return (
     <Card>
@@ -39,6 +51,8 @@ export function ProjectsForm() {
               index={index}
               remove={remove}
               control={control}
+              isExpanded={expandedIndex === index}
+              onToggle={() => setExpandedIndex(expandedIndex === index ? null : index)}
             />
           ))}
         </Reorder.Group>
@@ -48,15 +62,7 @@ export function ProjectsForm() {
           variant="outline"
           size="sm"
           className="w-full"
-          onClick={() =>
-            append({
-              id: crypto.randomUUID(),
-              title: "",
-              date: "",
-              techStack: "",
-              description: "",
-            })
-          }
+          onClick={handleAdd}
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Project
@@ -76,14 +82,17 @@ function ProjectItem({
   index,
   remove,
   control,
+  isExpanded,
+  onToggle,
 }: {
   field: Project;
   index: number;
   remove: UseFieldArrayRemove;
   control: Control<CVData>;
+  isExpanded: boolean;
+  onToggle: () => void;
 }) {
   const dragControls = useDragControls();
-  const [isExpanded, setIsExpanded] = React.useState(false);
 
   return (
     <Reorder.Item
@@ -112,7 +121,7 @@ function ProjectItem({
             variant="ghost"
             size="sm"
             className="p-1 h-auto"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={onToggle}
           >
              {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
@@ -151,7 +160,7 @@ function ProjectItem({
                     name={`projects.${index}.title`}
                     render={({ field }) => (
                       <Input
-                        placeholder="Personal Budget Application"
+                        placeholder="Project name"
                         {...field}
                       />
                     )}
@@ -163,7 +172,7 @@ function ProjectItem({
                     control={control}
                     name={`projects.${index}.date`}
                     render={({ field }) => (
-                      <Input placeholder="Sep 2024 – July 2025" {...field} />
+                      <Input placeholder="Duration (e.g. Jan 2024 - Present)" {...field} />
                     )}
                   />
                 </div>
@@ -176,7 +185,7 @@ function ProjectItem({
                   name={`projects.${index}.techStack`}
                   render={({ field }) => (
                     <Input
-                      placeholder="Skill: React Native, Firebase..."
+                      placeholder="Technologies used (comma-separated)"
                       {...field}
                     />
                   )}
@@ -190,7 +199,7 @@ function ProjectItem({
                   name={`projects.${index}.description`}
                   render={({ field }) => (
                     <Textarea
-                      placeholder="Brief description of the project..."
+                      placeholder="What you built and the outcome"
                       {...field}
                     />
                   )}

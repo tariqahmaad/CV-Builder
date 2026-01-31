@@ -23,7 +23,7 @@ export function PersonalDetailsForm() {
               control={control}
               name="personalInfo.fullName"
               render={({ field }) => (
-                <Input id="fullName" placeholder="Tariq Ahmad" {...field} />
+                <Input id="fullName" placeholder="Your full name" {...field} />
               )}
             />
           </div>
@@ -33,7 +33,7 @@ export function PersonalDetailsForm() {
               control={control}
               name="personalInfo.jobTitle"
               render={({ field }) => (
-                <Input id="jobTitle" placeholder="" {...field} />
+                <Input id="jobTitle" placeholder="Your job title" {...field} />
               )}
             />
           </div>
@@ -49,7 +49,7 @@ export function PersonalDetailsForm() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="tariq@example.com"
+                  placeholder="your.email@example.com"
                   {...field}
                 />
               )}
@@ -64,7 +64,7 @@ export function PersonalDetailsForm() {
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="+90 53 454 ..."
+                  placeholder="+1 (555) 123-4567"
                   {...field}
                 />
               )}
@@ -80,7 +80,7 @@ export function PersonalDetailsForm() {
             render={({ field }) => (
               <Input
                 id="address"
-                placeholder="Istanbul, Turkey"
+                placeholder="City, Country"
                 {...field}
               />
             )}
@@ -96,7 +96,7 @@ export function PersonalDetailsForm() {
               render={({ field }) => (
                 <Input
                   id="linkedin"
-                  placeholder="linkedin.com/in/..."
+                  placeholder="linkedin.com/in/username"
                   {...field}
                 />
               )}
@@ -110,7 +110,7 @@ export function PersonalDetailsForm() {
               render={({ field }) => (
                 <Input
                   id="github"
-                  placeholder="github.com/..."
+                  placeholder="github.com/username"
                   {...field}
                 />
               )}
@@ -124,7 +124,7 @@ export function PersonalDetailsForm() {
               render={({ field }) => (
                 <Input
                   id="website"
-                  placeholder="tariqahmad.dev"
+                  placeholder="yourwebsite.com"
                   {...field}
                 />
               )}
@@ -140,7 +140,7 @@ export function PersonalDetailsForm() {
             render={({ field }) => (
               <Textarea
                 id="summary"
-                placeholder="Ambitious Computer Engineering student..."
+                placeholder="Brief summary of your experience and career goals"
                 className="min-h-[100px]"
                 {...field}
               />

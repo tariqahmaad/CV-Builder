@@ -17,6 +17,17 @@ export function SkillsForm() {
     name: "skills",
     keyName: "_id",
   });
+  const [expandedIndex, setExpandedIndex] = React.useState<number | null>(null);
+
+  const handleAdd = () => {
+    append({
+      id: crypto.randomUUID(),
+      name: "",
+      description: "",
+      category: "technical",
+    });
+    setExpandedIndex(fields.length);
+  };
 
   return (
     <Card>
@@ -37,6 +48,8 @@ export function SkillsForm() {
               index={index}
               remove={remove}
               control={control}
+              isExpanded={expandedIndex === index}
+              onToggle={() => setExpandedIndex(expandedIndex === index ? null : index)}
             />
           ))}
         </Reorder.Group>
@@ -46,14 +59,7 @@ export function SkillsForm() {
           variant="outline"
           size="sm"
           className="w-full mt-4"
-          onClick={() =>
-            append({
-              id: crypto.randomUUID(),
-              name: "",
-              description: "",
-              category: "technical",
-            })
-          }
+          onClick={handleAdd}
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Skill
@@ -73,14 +79,17 @@ function SkillItem({
   index,
   remove,
   control,
+  isExpanded,
+  onToggle,
 }: {
   field: Skill;
   index: number;
   remove: UseFieldArrayRemove;
   control: Control<CVData>;
+  isExpanded: boolean;
+  onToggle: () => void;
 }) {
   const dragControls = useDragControls();
-  const [isExpanded, setIsExpanded] = React.useState(false);
 
   return (
     <Reorder.Item
@@ -109,7 +118,7 @@ function SkillItem({
             variant="ghost"
             size="sm"
             className="p-1 h-auto"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={onToggle}
           >
              {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
@@ -147,7 +156,7 @@ function SkillItem({
                     control={control}
                     name={`skills.${index}.name`}
                     render={({ field }) => (
-                      <Input placeholder="e.g. Languages" {...field} />
+                      <Input placeholder="Category (e.g. Languages, Tools)" {...field} />
                     )}
                   />
                 </div>
@@ -182,7 +191,7 @@ function SkillItem({
                   control={control}
                   name={`skills.${index}.description`}
                   render={({ field }) => (
-                    <Input placeholder="e.g. Python, Java, C++" {...field} />
+                    <Input placeholder="Skills (comma-separated)" {...field} />
                   )}
                 />
               </div>

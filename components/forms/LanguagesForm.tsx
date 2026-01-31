@@ -114,7 +114,7 @@ function LanguageItem({
           control={control}
           name={`languages.${index}.proficiency`}
           render={({ field }) => (
-            <Input placeholder="Proficiency" {...field} />
+            <Input placeholder="Proficiency level" {...field} />
           )}
         />
       </div>

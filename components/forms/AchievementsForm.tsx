@@ -18,6 +18,17 @@ export function AchievementsForm() {
     name: "achievements",
     keyName: "_id",
   });
+  const [expandedIndex, setExpandedIndex] = React.useState<number | null>(null);
+
+  const handleAdd = () => {
+    append({
+      id: crypto.randomUUID(),
+      title: "",
+      organization: "",
+      date: "",
+    });
+    setExpandedIndex(fields.length);
+  };
 
   return (
     <Card>
@@ -38,6 +49,8 @@ export function AchievementsForm() {
               index={index}
               remove={remove}
               control={control}
+              isExpanded={expandedIndex === index}
+              onToggle={() => setExpandedIndex(expandedIndex === index ? null : index)}
             />
           ))}
         </Reorder.Group>
@@ -47,14 +60,7 @@ export function AchievementsForm() {
           variant="outline"
           size="sm"
           className="w-full"
-          onClick={() =>
-            append({
-              id: crypto.randomUUID(),
-              title: "",
-              organization: "",
-              date: "",
-            })
-          }
+          onClick={handleAdd}
         >
           <Plus className="h-4 w-4 mr-2" />
           Add Item
@@ -74,14 +80,17 @@ function AchievementItem({
   index,
   remove,
   control,
+  isExpanded,
+  onToggle,
 }: {
   field: Achievement;
   index: number;
   remove: UseFieldArrayRemove;
   control: Control<CVData>;
+  isExpanded: boolean;
+  onToggle: () => void;
 }) {
   const dragControls = useDragControls();
-  const [isExpanded, setIsExpanded] = React.useState(false);
 
   return (
     <Reorder.Item
@@ -110,7 +119,7 @@ function AchievementItem({
             variant="ghost"
             size="sm"
             className="p-1 h-auto"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={onToggle}
           >
              {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
@@ -147,7 +156,7 @@ function AchievementItem({
                   control={control}
                   name={`achievements.${index}.title`}
                   render={({ field }) => (
-                    <Input placeholder="IELTS – Overall Band: 6.0" {...field} />
+                    <Input placeholder="Certificate, award, or achievement" {...field} />
                   )}
                 />
               </div>
@@ -157,7 +166,7 @@ function AchievementItem({
                   control={control}
                   name={`achievements.${index}.date`}
                   render={({ field }) => (
-                    <Input placeholder="Feb 2025" {...field} />
+                    <Input placeholder="Date received" {...field} />
                   )}
                 />
               </div>
@@ -168,7 +177,7 @@ function AchievementItem({
                 control={control}
                 name={`achievements.${index}.organization`}
                 render={({ field }) => (
-                  <Input placeholder="IDP Education" {...field} />
+                  <Input placeholder="Issuing organization" {...field} />
                 )}
               />
             </div>

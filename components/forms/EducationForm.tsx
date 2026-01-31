@@ -18,6 +18,19 @@ export function EducationForm() {
     name: "education",
     keyName: "_id",
   });
+  const [expandedIndex, setExpandedIndex] = React.useState<number | null>(null);
+
+  const handleAdd = () => {
+    append({
+      id: crypto.randomUUID(),
+      school: "",
+      degree: "",
+      startDate: "",
+      endDate: "",
+      description: "",
+    });
+    setExpandedIndex(fields.length);
+  };
 
   return (
     <Card>
@@ -38,6 +51,8 @@ export function EducationForm() {
               index={index}
               remove={remove}
               control={control}
+              isExpanded={expandedIndex === index}
+              onToggle={() => setExpandedIndex(expandedIndex === index ? null : index)}
             />
           ))}
         </Reorder.Group>
@@ -47,16 +62,7 @@ export function EducationForm() {
           variant="outline"
           size="sm"
           className="w-full"
-          onClick={() =>
-            append({
-              id: crypto.randomUUID(),
-              school: "",
-              degree: "",
-              startDate: "",
-              endDate: "",
-              description: "",
-            })
-          }
+          onClick={handleAdd}
         >
           <Plus className="h-4 w-4 mr-2" />
           Add School
@@ -76,14 +82,17 @@ function EducationItem({
   index,
   remove,
   control,
+  isExpanded,
+  onToggle,
 }: {
   field: Education;
   index: number;
   remove: UseFieldArrayRemove;
   control: Control<CVData>;
+  isExpanded: boolean;
+  onToggle: () => void;
 }) {
   const dragControls = useDragControls();
-  const [isExpanded, setIsExpanded] = React.useState(false);
 
   return (
     <Reorder.Item
@@ -112,7 +121,7 @@ function EducationItem({
             variant="ghost"
             size="sm"
             className="p-1 h-auto"
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={onToggle}
           >
              {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
@@ -150,7 +159,7 @@ function EducationItem({
                     control={control}
                     name={`education.${index}.school`}
                     render={({ field }) => (
-                      <Input placeholder="University Name" {...field} />
+                      <Input placeholder="University or school name" {...field} />
                     )}
                   />
                 </div>
@@ -160,7 +169,7 @@ function EducationItem({
                     control={control}
                     name={`education.${index}.degree`}
                     render={({ field }) => (
-                      <Input placeholder="Bachelor's in..." {...field} />
+                      <Input placeholder="Degree or certificate earned" {...field} />
                     )}
                   />
                 </div>
@@ -183,7 +192,7 @@ function EducationItem({
                     control={control}
                     name={`education.${index}.endDate`}
                     render={({ field }) => (
-                      <Input placeholder="MM/YYYY" {...field} />
+                      <Input placeholder="MM/YYYY or Present" {...field} />
                     )}
                   />
                 </div>
